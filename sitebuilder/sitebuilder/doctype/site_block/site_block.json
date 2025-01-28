@@ -1,0 +1,178 @@
+{
+ "actions": [],
+ "allow_import": 1,
+ "allow_rename": 1,
+ "autoname": "format:{title}",
+ "creation": "2025-01-20 20:38:28.504402",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "title",
+  "type",
+  "label",
+  "column_break_gtqh",
+  "generate",
+  "page",
+  "folder_name",
+  "column_break_ypsy",
+  "standard",
+  "module",
+  "code_section",
+  "code",
+  "section_break_ynol",
+  "fields",
+  "template_section",
+  "template"
+ ],
+ "fields": [
+  {
+   "fieldname": "title",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Title",
+   "reqd": 1
+  },
+  {
+   "default": "Component",
+   "fieldname": "type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Type",
+   "options": "Component\nSection\nDashboard\nAuth\nData\nNavbar\nFooter"
+  },
+  {
+   "fieldname": "label",
+   "fieldtype": "Data",
+   "label": "Label"
+  },
+  {
+   "fieldname": "column_break_gtqh",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Default",
+   "fieldname": "generate",
+   "fieldtype": "Select",
+   "label": "Generation Path",
+   "options": "Default\nPage\nFolder Name"
+  },
+  {
+   "depends_on": "eval:doc.generate==\"Page\"",
+   "description": "Site Page",
+   "fieldname": "page",
+   "fieldtype": "Data",
+   "label": "Page"
+  },
+  {
+   "depends_on": "eval:doc.generate==\"Folder Name\"",
+   "fieldname": "folder_name",
+   "fieldtype": "Data",
+   "label": "Folder Name"
+  },
+  {
+   "fieldname": "column_break_ypsy",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "standard",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Standard"
+  },
+  {
+   "depends_on": "eval:doc.standard==1",
+   "fieldname": "module",
+   "fieldtype": "Link",
+   "label": "Module",
+   "mandatory_depends_on": "eval:doc.standard==1",
+   "options": "Module Def"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "code_section",
+   "fieldtype": "Section Break",
+   "label": "Code"
+  },
+  {
+   "fieldname": "code",
+   "fieldtype": "Code",
+   "label": "Code",
+   "options": "Typescript"
+  },
+  {
+   "fieldname": "section_break_ynol",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "fields",
+   "fieldtype": "Table",
+   "label": "Fields",
+   "options": "Site Block Field"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "template_section",
+   "fieldtype": "Section Break",
+   "label": "Template"
+  },
+  {
+   "depends_on": "eval:!doc.standard",
+   "fieldname": "template",
+   "fieldtype": "Code",
+   "label": "Template",
+   "options": "Jinja"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-01-20 20:39:17.746196",
+ "modified_by": "Administrator",
+ "module": "Sitebuilder",
+ "name": "Site Block",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Guest",
+   "share": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Blogger",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}
