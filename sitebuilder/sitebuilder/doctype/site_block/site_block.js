@@ -10,6 +10,14 @@ frappe.ui.form.on("Site Block", {
     refresh: function (frm) {
       generate_fieldlabel(frm);
   
+    //   if (frm.doc.docstatus == 0 ) {
+    //     frm.add_custom_button(__("Site Block"), function () {
+    //         utils_createRefDocument("Site Block", frm);
+    //     }, __('Create'), {
+    //         class: 'btn btn-primary btn-sm primary-action',
+    //     });
+    // }
+
       // Add "Go To" button for Front Page
       frm.add_custom_button(
         __("Site Page"),
@@ -156,3 +164,72 @@ frappe.ui.form.on("Site Block", {
     }
   }
   
+
+
+frappe.ui.form.on('Site Block', {
+  onload: function(frm) {
+
+      // frm.ignore_doctypes_on_cancel_all=["Purchase Request","Request for Quotation", "Purchase Order"];
+
+      if (frm.is_new() && frm.doc.creation_type =="Indirect") {
+          addReferenceDocsChild(frm);
+
+          frm.clear_table('fields');
+          // frm.clear_table('references');
+
+
+          function addReferenceDocsChild(frm) {
+              // Fetch data from the referenced doctype
+              frappe.call({
+                  method: "sitebuilder.sitebuilder.utils.utils_get_referenced_doc",
+                  args: {
+                      doctype_name: frm.doc.doctype_name,
+                      reference_name: frm.doc.reference_name
+                  },
+                  callback: function(response) {
+                      console.log("API response:", response);
+                      // Check if response contains data
+                      let data = response.message;
+                      if (data) {
+                          // Handle additional fields
+                          if (data.head_data) {
+
+                              frm.set_value({
+                                 title: data.head_data.title,
+                                 type: data.head_data.type,
+
+
+                              }) }
+
+                          if (data.tables && data.tables.fields) {
+                              $.each(data.tables.fields, function(_i, e) {
+                                  let item = frm.add_child("fields");
+                                  item.label = e.label;
+                                  item.fieldname = e.fieldname;
+                                  item.fieldtype = e.fieldtype;
+                                  item.options = e.options;
+                                  item.default = e.default;
+                                  
+                              });
+                              frm.refresh_field('fields');
+                          }
+
+
+                          if (!frm.is_new()) {
+                              frm.save();
+                              frm.reload();
+                          }
+
+                         
+
+
+
+                      } else {
+                          console.log("No data found");
+                      }
+                  }
+              });
+          }
+      }
+  }
+  });

@@ -115,7 +115,7 @@
    "label": "Login Page"
   },
   {
-   "default": "Frappe",
+   "default": "Alool",
    "fieldname": "app_name",
    "fieldtype": "Data",
    "label": "App Name"
@@ -482,7 +482,7 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2025-01-20 20:44:36.438174",
+ "modified": "2025-01-28 15:01:21.739661",
  "modified_by": "Administrator",
  "module": "Sitebuilder",
  "name": "Site Settings",

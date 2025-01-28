@@ -267,3 +267,72 @@ frappe.ui.form.on("Site Page", {
     });
   }
   
+
+
+frappe.ui.form.on('Site Page', {
+  onload: function(frm) {
+
+      // frm.ignore_doctypes_on_cancel_all=["Purchase Request","Request for Quotation", "Purchase Order"];
+
+      if (frm.is_new() && frm.doc.creation_type =="Indirect") {
+          addReferenceDocsChild(frm);
+
+          frm.clear_table('fields');
+          // frm.clear_table('references');
+
+
+          function addReferenceDocsChild(frm) {
+              // Fetch data from the referenced doctype
+              frappe.call({
+                  method: "sitebuilder.sitebuilder.utils.utils_get_referenced_doc",
+                  args: {
+                      doctype_name: frm.doc.doctype_name,
+                      reference_name: frm.doc.reference_name
+                  },
+                  callback: function(response) {
+                      console.log("API response:", response);
+                      // Check if response contains data
+                      let data = response.message;
+                      if (data) {
+                          // Handle additional fields
+                          if (data.head_data) {
+
+                              frm.set_value({
+                                 title: data.head_data.title,
+                                 route: data.head_data.route,
+
+
+                              }) }
+
+                          if (data.tables && data.tables.page_blocks) {
+                              $.each(data.tables.page_blocks, function(_i, e) {
+                                  let item = frm.add_child("page_blocks");
+                                  item.web_template = e.web_template;
+                                  item.web_template_values = e.web_template_values;
+                                  // item.fieldtype = e.fieldtype;
+                                  // item.options = e.options;
+                                  // item.default = e.default;
+                                  
+                              });
+                              frm.refresh_field('page_blocks');
+                          }
+
+
+                          if (!frm.is_new()) {
+                              frm.save();
+                              frm.reload();
+                          }
+
+                         
+
+
+
+                      } else {
+                          console.log("No data found");
+                      }
+                  }
+              });
+          }
+      }
+  }
+  });

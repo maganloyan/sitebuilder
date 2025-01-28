@@ -62,7 +62,11 @@
   "column_break_wfsa",
   "lft",
   "rgt",
-  "old_parent"
+  "old_parent",
+  "references_tab",
+  "doctype_name",
+  "reference_name",
+  "creation_type"
  ],
  "fields": [
   {
@@ -394,6 +398,28 @@
   {
    "fieldname": "column_break_wfsa",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "references_tab",
+   "fieldtype": "Tab Break",
+   "label": "References"
+  },
+  {
+   "fieldname": "doctype_name",
+   "fieldtype": "Data",
+   "label": "Doctype Name"
+  },
+  {
+   "fieldname": "reference_name",
+   "fieldtype": "Data",
+   "label": "Reference Name"
+  },
+  {
+   "default": "Direct",
+   "fieldname": "creation_type",
+   "fieldtype": "Select",
+   "label": "Creation Type",
+   "options": "Direct\nIndirect"
   }
  ],
  "icon": "fa fa-file-alt",
@@ -402,7 +428,7 @@
  "is_tree": 1,
  "links": [],
  "make_attachments_public": 1,
- "modified": "2025-01-21 01:09:58.337589",
+ "modified": "2025-01-28 14:29:01.064998",
  "modified_by": "Administrator",
  "module": "Sitebuilder",
  "name": "Site Page",

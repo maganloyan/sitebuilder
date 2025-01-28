@@ -23,7 +23,11 @@
   "section_break_ynol",
   "fields",
   "template_section",
-  "template"
+  "template",
+  "references_tab",
+  "doctype_name",
+  "reference_name",
+  "creation_type"
  ],
  "fields": [
   {
@@ -126,11 +130,33 @@
    "fieldtype": "Code",
    "label": "Template",
    "options": "Jinja"
+  },
+  {
+   "fieldname": "references_tab",
+   "fieldtype": "Tab Break",
+   "label": "References"
+  },
+  {
+   "fieldname": "doctype_name",
+   "fieldtype": "Data",
+   "label": "Doctype Name"
+  },
+  {
+   "fieldname": "reference_name",
+   "fieldtype": "Data",
+   "label": "Reference Name"
+  },
+  {
+   "default": "Direct",
+   "fieldname": "creation_type",
+   "fieldtype": "Select",
+   "label": "Creation Type",
+   "options": "Direct\nIndirect"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-01-20 20:39:17.746196",
+ "modified": "2025-01-28 14:09:16.282995",
  "modified_by": "Administrator",
  "module": "Sitebuilder",
  "name": "Site Block",
