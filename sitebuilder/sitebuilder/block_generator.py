@@ -19,7 +19,7 @@ def get_app_paths(doctype, folder_name=None):
     if not folder_name:
         folder_name = "blocks" if doctype == "Site Block" else "sections"
 
-    app_name = "sahal"
+    app_name = "menumate"
     app_path: Path = Path("../apps") / app_name
     if not app_path.exists():
         print("App path does not exist - ignoring page generation")

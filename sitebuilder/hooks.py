@@ -128,6 +128,13 @@ app_license = "mit"
 # 	"Event": "frappe.desk.doctype.event.event.has_permission",
 # }
 
+# doc_events = {
+#     "Portal User": {
+#         "after_insert": "sitebuilder.sitebuilder.api.sync_portal_user",
+#         "on_update": "sitebuilder.sitebuilder.api.sync_portal_user",
+#     }
+# }
+
 # DocType Class
 # ---------------
 # Override standard doctype classes
@@ -245,3 +252,5 @@ app_license = "mit"
 # 	"Logging DocType Name": 30  # days to retain logs
 # }
 
+# on_session_creation = "sitebuilder.api.user_availability.set_user_active"
+# on_logout = "sitebuilder.api.user_availability.set_user_inactive"
