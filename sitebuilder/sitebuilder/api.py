@@ -1,38 +1,141 @@
-import frappe
 
-def sync_portal_user(doc, method):
+
+
+import frappe
+from frappe import _
+
+@frappe.whitelist()
+def get_doctype_fields(doctype):
     """
-    Create or update a User when a Portal User is created or updated.
+    Fetch fields of the specified doctype along with their options.
+    :param doctype: Name of the doctype to fetch fields from.
+    :return: List of field details.
     """
-    user = frappe.get_value("User", {"email": doc.email}, "name")
-    user_data = {
-        "first_name": doc.first_name,
-        "middle_name": doc.middle_name,
-        "full_name": doc.full_name,
-        "username": doc.username,
-        "email": doc.email,
-        "phone": doc.phone,
-        "user_image": doc.user_image,
-        "banner_image": doc.banner_image,
-        "gender": doc.gender,
-        "bio": doc.bio,
-        "location": doc.location,
-        "birth_date": doc.birth_date,
-        "new_password": doc.new_password,
-        "send_welcome_email": 0,  # Prevent sending default welcome email
-    }
-    
-    if user:
-        # Update existing User
-        frappe.db.set_value("User", user, user_data)
-    else:
-        # Create new User
-        user_data["enabled"] = 1  # Ensure user is active
-        user_data["role_profile_name"] = "Portal User"  # Assign Portal User role
-        new_user = frappe.get_doc({
-            "doctype": "User",
-            **user_data
-        })
-        new_user.insert(ignore_permissions=True)
-    
+    try:
+        # Get the doctype metadata
+        meta = frappe.get_meta(doctype)
+
+        # Extract field details
+        fields = []
+        for field in meta.fields:
+            field_data = {
+                "fieldname": field.fieldname,
+                "label": field.label,
+                "fieldtype": field.fieldtype,
+                "in_list_view": field.in_list_view,
+                "in_standard_filter": field.in_standard_filter,
+                "reqd": field.reqd,
+                "options": field.options if field.options else "",
+                "default": field.default if field.default else "",
+                "hidden": field.hidden,
+                "read_only": field.read_only,
+                "depends_on": field.depends_on if field.depends_on else "",
+            }
+            fields.append(field_data)
+
+        return {"doctype": doctype, "fields": fields}
+
+    except Exception as e:
+        frappe.throw(_("Error fetching fields: {0}").format(str(e)))
+
+
+
+
+
+
+@frappe.whitelist()
+def get_list(doctype, filters=None, fields="*", limit_page_length=1000, limit_start=0):
+    """Fetch a list of documents from any Doctype."""
+    filters = frappe.parse_json(filters) if filters else {}
+
+    docs = frappe.get_all(
+        doctype, 
+        fields=fields.split(",") if fields != "*" else ["*"], 
+        filters=filters,
+        limit_page_length=int(limit_page_length), 
+        limit_start=int(limit_start)
+    )
+    return docs
+
+@frappe.whitelist()
+def get_doc(doctype, name):
+    """Fetch a specific document by name (ID)."""
+    doc = frappe.get_doc(doctype, name)
+    return doc.as_dict()
+
+@frappe.whitelist()
+def create_doc(doctype, data):
+    """Create a new document in any Doctype."""
+    data = frappe.parse_json(data)
+    doc = frappe.get_doc({"doctype": doctype, **data})
+    doc.insert()
     frappe.db.commit()
+    return {"message": "Document created", "name": doc.name}
+
+@frappe.whitelist()
+def update_doc(doctype, name, data):
+    """Update an existing document."""
+    data = frappe.parse_json(data)
+    doc = frappe.get_doc(doctype, name)
+    
+    for key, value in data.items():
+        setattr(doc, key, value)
+
+    doc.save()
+    frappe.db.commit()
+    return {"message": "Document updated", "name": doc.name}
+
+@frappe.whitelist()
+def delete_doc(doctype, name):
+    """Delete a document from any Doctype."""
+    frappe.delete_doc(doctype, name, force=True)
+    frappe.db.commit()
+    return {"message": f"{doctype} {name} deleted"}
+
+
+@frappe.whitelist()
+def get_count(doctype, filters=None):
+    """Fetch the total count of documents in any Doctype."""
+    filters = frappe.parse_json(filters) if filters else {}
+
+    count = frappe.db.count(doctype, filters)
+    return {"count": count}
+
+
+@frappe.whitelist()
+def search_doctypes(query):
+    """Search Doctypes based on the query provided."""
+    # Fetch all doctypes that start with the search query (case insensitive)
+    doctypes = frappe.get_all("DocType", filters={"name": ["like", f"{query}%"]}, fields=["name"])
+    
+    # Return the result as a list of doctype names
+    return {"message": [doctype.name for doctype in doctypes]}
+
+import frappe
+from frappe.desk.search import search_widget
+
+@frappe.whitelist()
+def search_doctype(query):
+    """
+    Search for doctypes based on the query string
+    Returns a list of doctypes that match the search criteria
+    """
+    doctypes = frappe.get_all(
+        "DocType",
+        filters={
+            "name": ("like", f"{query}%"),
+            "istable": 0,
+            "issingle": 0,
+            "module": "taywaan"  # Replace with your module name or remove to search all
+        },
+        fields=["name", "module"],
+        limit=10
+    )
+    
+    return [
+        {
+            "name": d.name,
+            "label": frappe.get_meta(d.name).title or d.name
+        }
+        for d in doctypes
+    ]

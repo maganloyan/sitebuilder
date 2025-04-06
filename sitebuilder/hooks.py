@@ -254,3 +254,36 @@ app_license = "mit"
 
 # on_session_creation = "sitebuilder.api.user_availability.set_user_active"
 # on_logout = "sitebuilder.api.user_availability.set_user_inactive"
+
+# home_page = "web"
+
+# website_redirects = [
+#     # {"source": "/", "target": "web/home"},
+#     {"source": "/index", "target": "/"},
+#     {"source": "/me", "target": "/web/onboarding"},
+#     # {"source": "/contact", "target": "/web/contact"},
+#     # {"source": "/projects", "target": "/web/projects"},
+#     # {"source": "/services", "target": "/web/services"},
+#     # {"source": "/about", "target": "/web/about"},
+#     # {"source": "/blog", "target": "/web/blogs"},
+#     # {"source": "/news", "target": "/web/news"},
+#     # {"source": "/faq", "target": "/web/faq"},
+#     # {"source": "/jobs", "target": "/web/careers"},
+#     # {"source": "/jobs", "target": "/web/jobs"},
+#     # {"source": "/terms", "target": "/web/terms"},
+#     # {"source": "/privacy", "target": "/web/privacy"},
+#     # {"source": "/cookie-policy", "target": "/web/cookie-policy"},
+#     # {"source": "/sitemap", "target": "/web/sitemap"},
+#     # {"source": "/terms-and-conditions", "target": "/web/terms-and-conditions"},
+#     # {"source": "/404", "target": "/notfound"},
+   
+    
+# ]
+
+
+
+doc_events = {
+    "User": {
+        "before_save": "sitebuilder.api.signup.assign_portal_user_role"
+    }
+}
