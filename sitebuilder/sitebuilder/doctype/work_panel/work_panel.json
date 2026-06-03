@@ -70,7 +70,7 @@
    "fieldtype": "Column Break"
   },
   {
-   "default": "0",
+   "default": "1",
    "fieldname": "published",
    "fieldtype": "Check",
    "label": "Published"

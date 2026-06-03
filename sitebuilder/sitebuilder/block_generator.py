@@ -19,7 +19,7 @@ def get_app_paths(doctype, folder_name=None):
     if not folder_name:
         folder_name = "blocks" if doctype == "Site Block" else "sections"
 
-    app_name = "menumate"
+    app_name = "sitebuilder"
     app_path: Path = Path("../apps") / app_name
     if not app_path.exists():
         print("App path does not exist - ignoring page generation")
@@ -277,7 +277,7 @@ def generate_all_page_components():
     """
     try:
         # Fetch all records from the Page Component doctype
-        page_components = frappe.get_all('Page Component', fields=['name'])
+        page_components = frappe.get_all('Site Block', fields=['name'])
 
         if not page_components:
             frappe.msgprint("No Page Components found.")
@@ -318,7 +318,7 @@ def generate_page_components_for_type(type_, folder_name=None):
     """
     try:
         # Fetch all Page Component records of the selected type
-        page_components = frappe.get_all('Page Component', filters={'type': type_}, fields=['name'])
+        page_components = frappe.get_all('Site Block', filters={'type': type_}, fields=['name'])
 
         # Determine the folder name (use provided or default based on type)
         folder_name = folder_name or get_default_folder(type_)

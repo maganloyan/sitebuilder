@@ -58,7 +58,7 @@ class SiteBlock(Document):
 				self.import_from_files()
 
 	def on_update(self):
-		"""Clear cache for all Web Pages in which this template is used"""
+		"""Clear cache for Site Pages using this block, then auto-regenerate the .tsx file."""
 		routes = frappe.get_all(
 			"Site Page",
 			filters=[
@@ -69,6 +69,29 @@ class SiteBlock(Document):
 		)
 		for route in routes:
 			clear_cache(route)
+
+		# Auto-regenerate the React component whenever the block is saved
+		try:
+			from sitebuilder.sitebuilder.sitebuilder.block_generator import (
+				generate_frontend_component,
+				generate_page_component_template,
+			)
+
+			prev = self.get_doc_before_save()
+
+			# If the raw code field changed (or is set), write it verbatim
+			code_changed = self.code and (not prev or prev.get("code") != self.code)
+			if code_changed:
+				generate_page_component_template(self.name, self.doctype, self.folder_name or None)
+
+			# If the fields child table changed, auto-generate typed JSX from field definitions
+			fields_changed = not prev or prev.get("fields") != self.fields
+			if fields_changed and self.fields:
+				generate_frontend_component(self.name, self.doctype, self.folder_name or None)
+
+		except Exception as e:
+			# Never break a save because of generation failure — just log
+			frappe.log_error(f"SiteBlock .tsx generation failed for {self.name}: {e}")
 
 	def on_trash(self):
 		if frappe.conf.developer_mode and self.standard:

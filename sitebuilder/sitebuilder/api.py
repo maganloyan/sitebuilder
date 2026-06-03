@@ -7,18 +7,15 @@ from frappe import _
 @frappe.whitelist()
 def get_doctype_fields(doctype):
     """
-    Fetch fields of the specified doctype along with their options.
-    :param doctype: Name of the doctype to fetch fields from.
-    :return: List of field details.
+    Fetch fields and meta of the specified doctype.
+    Returns issingle flag so the frontend can handle single doctypes correctly.
     """
     try:
-        # Get the doctype metadata
         meta = frappe.get_meta(doctype)
 
-        # Extract field details
         fields = []
         for field in meta.fields:
-            field_data = {
+            fields.append({
                 "fieldname": field.fieldname,
                 "label": field.label,
                 "fieldtype": field.fieldtype,
@@ -30,10 +27,14 @@ def get_doctype_fields(doctype):
                 "hidden": field.hidden,
                 "read_only": field.read_only,
                 "depends_on": field.depends_on if field.depends_on else "",
-            }
-            fields.append(field_data)
+                "display_field": field.display_field if hasattr(field, "display_field") else "",
+            })
 
-        return {"doctype": doctype, "fields": fields}
+        return {
+            "doctype": doctype,
+            "issingle": meta.issingle,
+            "fields": fields,
+        }
 
     except Exception as e:
         frappe.throw(_("Error fetching fields: {0}").format(str(e)))
@@ -126,7 +127,7 @@ def search_doctype(query):
             "name": ("like", f"{query}%"),
             "istable": 0,
             "issingle": 0,
-            "module": "taywaan"  # Replace with your module name or remove to search all
+            "module": "Sitebuilder"
         },
         fields=["name", "module"],
         limit=10

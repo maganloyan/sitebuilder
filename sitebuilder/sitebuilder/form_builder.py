@@ -9,7 +9,7 @@ def generate_form(docname, doctype, folder_name="forms"):
     doc = frappe.get_doc(doctype, docname)
 
     # Determine paths
-    app_name = "taywaan"  # Assuming single app
+    app_name = "sitebuilder"
     app_path: Path = Path("../apps") / app_name
     components_directory = app_path / "web" / "src" / "components" / folder_name
 
@@ -103,7 +103,7 @@ def generate_form(docname, doctype, folder_name="forms"):
     # Create the component content
     content = (
         'import React from "react";\n'
-        'import DynamicForm from "@/components/tests/DynamicForm";\n'
+        'import DynamicForm from "@/components/forms/DynamicForm";\n'
         '\n'
         f'const {component_name} = () => {{\n'
         '  return (\n'

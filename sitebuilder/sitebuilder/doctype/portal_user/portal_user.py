@@ -4,6 +4,11 @@
 import frappe
 from frappe.model.document import Document
 
+def sync_on_save(doc, method=None):
+    """Hook handler called by doc_events — delegates to the instance method."""
+    doc.sync_user()
+
+
 class PortalUser(Document):
     def validate(self):
         self.sync_user()

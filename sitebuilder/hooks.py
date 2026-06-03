@@ -285,5 +285,13 @@ app_license = "mit"
 doc_events = {
     "User": {
         "before_save": "sitebuilder.api.signup.assign_portal_user_role"
+    },
+    "Portal User": {
+        "after_insert": "sitebuilder.sitebuilder.sitebuilder.doctype.portal_user.portal_user.sync_on_save",
+        "on_update": "sitebuilder.sitebuilder.sitebuilder.doctype.portal_user.portal_user.sync_on_save",
     }
 }
+
+website_route_rules = [
+    {'from_route': '/web/<path:app_path>', 'to_route': 'web'}
+]

@@ -38,7 +38,7 @@ frappe.ui.form.on("Site Form", {
             args: {
               docname: frm.doc.name,
               doctype: frm.doc.doctype,
-              folder_name: "tests", // Pass the determined folder name
+				folder_name: "forms",
             },
             // callback: function(r) {
             //     frappe.msgprint(__('Component generated successfully.'));
