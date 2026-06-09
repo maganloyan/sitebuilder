@@ -1,0 +1,20 @@
+{
+ "__unsaved": 1,
+ "creation": "2026-06-01 01:06:48.844533",
+ "creation_type": "Direct",
+ "docstatus": 0,
+ "doctype": "Site Block",
+ "fields": [],
+ "generate": "Default",
+ "idx": 0,
+ "label": "Cafes",
+ "modified": "2026-06-04 08:02:52.025275",
+ "modified_by": "Administrator",
+ "module": "Sitebuilder",
+ "name": "Cafes",
+ "owner": "Administrator",
+ "standard": 1,
+ "template": "",
+ "title": "Cafes",
+ "type": "Component"
+}

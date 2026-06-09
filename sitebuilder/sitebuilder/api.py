@@ -116,6 +116,82 @@ import frappe
 from frappe.desk.search import search_widget
 
 @frappe.whitelist()
+def portal_search(query):
+    """Search Work Panels (navigation) and Sitebuilder records in one call."""
+    if not query or len(query.strip()) < 2:
+        return {"nav": [], "records": []}
+
+    q = query.strip()
+
+    nav_items = frappe.get_all(
+        "Work Panel",
+        filters={"title": ["like", f"%{q}%"], "published": 1},
+        fields=["name", "title", "route", "icon"],
+        limit=8,
+    )
+
+    sitebuilder_doctypes = frappe.get_all(
+        "DocType",
+        filters={"module": "Sitebuilder", "istable": 0, "issingle": 0},
+        fields=["name"],
+        limit=20,
+    )
+
+    record_results = []
+    for dt in sitebuilder_doctypes:
+        try:
+            records = frappe.get_all(
+                dt.name,
+                filters={"name": ["like", f"%{q}%"]},
+                fields=["name"],
+                limit=3,
+            )
+            for r in records:
+                record_results.append({"doctype": dt.name, "name": r.name})
+        except Exception:
+            continue
+
+    doctype_results = frappe.get_all(
+        "DocType",
+        filters={"name": ["like", f"%{q}%"],  "istable": 0, },
+        fields=["name"],
+        limit=8,
+    )
+
+    return {"nav": nav_items, "doctypes": doctype_results, "records": record_results}
+
+
+@frappe.whitelist()
+def portal_list_doctypes(limit=15):
+    """Doctypes the current user can read — for command palette shortcuts."""
+    limit = min(int(limit or 15), 30)
+    names = []
+    for row in frappe.get_all(
+        "DocType",
+        filters={"istable": 0, "issingle": 0},
+        fields=["name"],
+        order_by="name asc",
+        limit=200,
+    ):
+        if frappe.has_permission(row.name, "read"):
+            names.append({"name": row.name})
+        if len(names) >= limit:
+            break
+    return names
+
+
+@frappe.whitelist()
+def save_page_blocks(page_name, blocks):
+    """Replace the page_blocks child table on a SitePage and save."""
+    blocks = frappe.parse_json(blocks)
+    doc = frappe.get_doc("Site Page", page_name)
+    doc.set("page_blocks", blocks)
+    doc.save()
+    frappe.db.commit()
+    return {"message": "Page blocks saved", "name": doc.name}
+
+
+@frappe.whitelist()
 def search_doctype(query):
     """
     Search for doctypes based on the query string

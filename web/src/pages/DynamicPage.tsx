@@ -3,7 +3,7 @@ import {  useParams } from "react-router-dom";
 import {Helmet} from "react-helmet";
 import { useFrappeGetDoc } from "frappe-react-sdk";
 import NotFound from "@/pages//NotFound";
-import getBlockStyles from "@/utils/getBlockStyles";
+import getBlockStyles from "@/lib/getBlockStyles";
 
 const DynamicPage: React.FC = () => {
   

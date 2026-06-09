@@ -180,7 +180,7 @@ export const CurrentUserProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 };
 
-export const useCurrentUser = () => {
+export const UseCurrentUser = () => {
   const context = useContext(CurrentUserContext);
   if (context === undefined) {
     throw new Error("useCurrentUser must be used within a CurrentUserProvider");

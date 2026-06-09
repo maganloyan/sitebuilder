@@ -18,6 +18,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { userMenu } from "@/auth/userMenu"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 
 interface FrappeUser {
   name: string
@@ -57,7 +58,8 @@ export function NavUser() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className="flex items-center gap-2 rounded-lg  hover:bg-accent">
+        <Tooltip>
+          <TooltipTrigger asChild>
           <Avatar className="h-8 w-8 rounded-lg">
             <AvatarImage src={userData.user_image} alt={userData.full_name} />
             <AvatarFallback className="rounded-lg">
@@ -65,7 +67,11 @@ export function NavUser() {
             </AvatarFallback>
           </Avatar>
           <ChevronsUpDown className="size-4" />
-        </button>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>User Menu</p>
+        </TooltipContent>
+        </Tooltip>
       </DropdownMenuTrigger>
 
       <DropdownMenuContent

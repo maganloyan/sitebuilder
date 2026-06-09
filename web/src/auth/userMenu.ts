@@ -54,7 +54,7 @@ import {
         {
           label: "Notifications",
           icon: Bell,
-          path: "/notifications"
+          path: "/portal/notifications"
         }
       ]
     },

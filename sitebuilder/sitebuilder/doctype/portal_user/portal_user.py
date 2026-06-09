@@ -4,6 +4,20 @@
 import frappe
 from frappe.model.document import Document
 
+PORTAL_ROLE = "Portal User"
+
+
+def _ensure_portal_user_role():
+	if not frappe.db.exists("Role", PORTAL_ROLE):
+		frappe.get_doc({"doctype": "Role", "role_name": PORTAL_ROLE}).insert(ignore_permissions=True)
+
+
+def _assign_portal_role(user_doc):
+	_ensure_portal_user_role()
+	if not any(role.role == PORTAL_ROLE for role in user_doc.roles):
+		user_doc.append("roles", {"role": PORTAL_ROLE})
+
+
 def sync_on_save(doc, method=None):
     """Hook handler called by doc_events — delegates to the instance method."""
     doc.sync_user()
@@ -36,18 +50,12 @@ class PortalUser(Document):
         }
 
         if user:
-            # Update existing User
             user_doc = frappe.get_doc("User", user)
             user_doc.update(user_data)
-            user_doc.save(ignore_permissions=True)  # Ignore permissions when updating
+            _assign_portal_role(user_doc)
+            user_doc.save(ignore_permissions=True)
         else:
-            # Create new User
             user_doc = frappe.get_doc({"doctype": "User", **user_data})
+            _assign_portal_role(user_doc)
+            user_doc.flags.no_welcome_mail = True
             user_doc.insert(ignore_permissions=True)
-
-        # Assign the "Portal User" role if not already assigned
-        if not frappe.db.exists("Has Role", {"parent": user_doc.name, "role": "Portal User"}):
-            user_doc.append("roles", {"role": "Portal User"})
-
-        user_doc.save(ignore_permissions=True)  # Ensure role assignment is saved
-        frappe.db.commit()  # Ensure changes are saved

@@ -3,7 +3,7 @@ import { useFrappeGetCall } from "frappe-react-sdk";
 import { Button } from "@/components/ui/button";
 import {useNavigate } from "react-router-dom";
 
-import { Google, Github, Facebook } from "./Socialicons";
+import { Google, Github, Facebook } from "@/assets/Socialicons";
 
 
 interface SocialLoginIcon {

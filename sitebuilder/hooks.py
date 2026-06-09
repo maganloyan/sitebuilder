@@ -287,9 +287,12 @@ doc_events = {
         "before_save": "sitebuilder.api.signup.assign_portal_user_role"
     },
     "Portal User": {
-        "after_insert": "sitebuilder.sitebuilder.sitebuilder.doctype.portal_user.portal_user.sync_on_save",
-        "on_update": "sitebuilder.sitebuilder.sitebuilder.doctype.portal_user.portal_user.sync_on_save",
-    }
+        "after_insert": "sitebuilder.sitebuilder.doctype.portal_user.portal_user.sync_on_save",
+        "on_update": "sitebuilder.sitebuilder.doctype.portal_user.portal_user.sync_on_save",
+    },
+    "Site Page": {
+        "on_update": "sitebuilder.sitebuilder.notifications.notify_site_page_update",
+    },
 }
 
 website_route_rules = [

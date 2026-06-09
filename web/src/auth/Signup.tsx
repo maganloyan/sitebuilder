@@ -8,7 +8,8 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import SocialLogin from "@/auth/SocialLogin"
-import toast from "react-hot-toast"
+import toast from "@/lib/portal-toast"
+import { getFrappeErrorMessage } from "@/lib/utils"
 
 interface SignupFormInputs {
   first_name: string
@@ -44,8 +45,11 @@ export default function Signup() {
       await signupUser({ first_name: data.first_name, last_name: data.last_name, email: data.email, username: data.email })
       setUserEmail(data.email)
       setStep("password")
-    } catch {
-      setError("Signup failed. This email may already be registered.")
+    } catch (err) {
+      setError(
+        getFrappeErrorMessage(err) ??
+          "Signup failed. This email may already be registered."
+      )
     }
   }
 
