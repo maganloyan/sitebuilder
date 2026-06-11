@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { useFrappeGetCall } from "frappe-react-sdk"
 import { PortalErrorState } from "@/components/kit/feedback/portal-state"
-import { Skeleton } from "@/components/ui/skeleton"
+import { FormViewSkeleton } from "@/components/kit/feedback/view-skeletons"
 import DynamicFormView from "../form/DynamicFormView"
 
 const toTitleCase = (s: string) =>
@@ -66,12 +66,7 @@ export default function FormView() {
   const doctype = raw ? toTitleCase(raw) : ""
   const { fields, isLoading, error } = useDocFields(doctype)
 
-  if (isLoading) return (
-    <div className="space-y-4 p-6">
-      <Skeleton className="h-14 w-full" />
-      <Skeleton className="h-48 w-full" />
-    </div>
-  )
+  if (isLoading) return <FormViewSkeleton />
   if (error) {
     return (
       <PortalErrorState

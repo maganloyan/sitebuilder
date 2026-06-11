@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import { useFrappeGetCall } from "frappe-react-sdk"
 import { PortalErrorState } from "@/components/kit/feedback/portal-state"
-import { Skeleton } from "@/components/ui/skeleton"
+import { DataTableSkeleton } from "@/components/kit/feedback/view-skeletons"
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu"
 import { LayoutTemplate } from "lucide-react"
 import DynamicTable from "../table/DynamicTable"
@@ -73,12 +73,7 @@ export default function ListView() {
   }, [data])
 
   if (isLoading) {
-    return (
-      <div className="space-y-3">
-        <Skeleton className="h-9 w-full max-w-sm" />
-        <Skeleton className="h-64 w-full" />
-      </div>
-    )
+    return <DataTableSkeleton filterCount={2} columnCount={4} />
   }
 
   if (error) {

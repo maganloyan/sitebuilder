@@ -123,7 +123,7 @@ export function NavMain({
 
       setGroupedMenuItems(grouped)
     }
-  }, [workPanels, location.pathname])
+  }, [workPanels, location.pathname ])
 
   if (isLoading) {
     return (
@@ -173,7 +173,7 @@ export function NavMain({
       {Object.entries(groupedMenuItems).map(([groupLabel, items], index, array) => (
         <div key={groupLabel}>
           <SidebarGroup className="py-1">
-            <SidebarGroupLabel className="text-xs uppercase tracking-wide text-muted-foreground">
+            <SidebarGroupLabel className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/80">
               {groupLabel}
             </SidebarGroupLabel>
             <SidebarMenu>

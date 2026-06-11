@@ -31,7 +31,9 @@ export function KitBreadcrumbs({
             <Fragment key={`${i}-${item.href ?? ""}-${item.label}`}>
               <BreadcrumbItem>
                 {isLast || !item.href ? (
-                  <BreadcrumbPage>{item.label}</BreadcrumbPage>
+                  <BreadcrumbPage className="rounded-sm bg-primary/10 px-2 py-0.5 text-xs font-extrabold text-primary">
+                    {item.label}
+                  </BreadcrumbPage>
                 ) : (
                   <Link
                     to={item.href}

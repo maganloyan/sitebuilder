@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Skeleton } from "@/components/ui/skeleton"
+import { PageBuilderSkeleton } from "@/components/kit/feedback/view-skeletons"
 import { Separator } from "@/components/ui/separator"
 import { toast } from "sonner"
 import { cn } from "@/lib/utils"
@@ -151,6 +152,10 @@ export function PageBuilder() {
 
       {/* Three-column body */}
       <div className="flex flex-1 min-h-0">
+        {pageLoading || blocksLoading ? (
+          <PageBuilderSkeleton />
+        ) : (
+          <>
         {/* Left — block library */}
         <div className="w-56 shrink-0 border-r bg-muted/20 flex flex-col">
           <div className="px-3 py-2 border-b">
@@ -160,11 +165,7 @@ export function PageBuilder() {
           </div>
           <ScrollArea className="flex-1">
             <div className="p-2 space-y-0.5">
-              {blocksLoading
-                ? Array.from({ length: 6 }).map((_, i) => (
-                    <Skeleton key={i} className="h-8 w-full rounded-md" />
-                  ))
-                : siteBlocks?.map(block => (
+              {siteBlocks?.map(block => (
                     <button
                       key={block.name}
                       onClick={() => addBlock(block.name)}
@@ -174,7 +175,7 @@ export function PageBuilder() {
                       <span className="truncate">{block.name}</span>
                     </button>
                   ))}
-              {!blocksLoading && !siteBlocks?.length && (
+              {!siteBlocks?.length && (
                 <p className="text-xs text-muted-foreground px-2 py-8 text-center leading-relaxed">
                   No blocks yet.
                   <br />
@@ -194,11 +195,7 @@ export function PageBuilder() {
         <ScrollArea className="flex-1 bg-muted/10">
           <div className="p-6 min-h-full">
             <div className="max-w-2xl mx-auto space-y-2">
-              {pageLoading ? (
-                Array.from({ length: 3 }).map((_, i) => (
-                  <Skeleton key={i} className="h-[68px] w-full rounded-xl" />
-                ))
-              ) : blocks.length === 0 ? (
+              {blocks.length === 0 ? (
                 <div className="border-2 border-dashed rounded-xl p-16 text-center">
                   <p className="text-sm font-medium text-muted-foreground">No blocks on this page</p>
                   <p className="text-xs text-muted-foreground/70 mt-1">
@@ -315,6 +312,8 @@ export function PageBuilder() {
             )}
           </div>
         </div>
+          </>
+        )}
       </div>
     </div>
   )

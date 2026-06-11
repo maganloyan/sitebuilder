@@ -24,7 +24,7 @@ export function DashboardHeader() {
   const showBreadcrumbs = breadcrumbs && breadcrumbs.length > 1
 
   return (
-    <header className="flex shrink-0 flex-col gap-2 border-b bg-background px-4 py-3 lg:px-6  h-(--header-height) rounded-t-xl transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height)">
+    <header className="sticky top-0 z-10 flex shrink-0 flex-col gap-2 border-b backdrop-blur-md bg-background/80 px-4 py-3 lg:px-6 h-(--header-height) rounded-t-xl transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height)">
       <div className="flex w-full items-center justify-between gap-4">
         <div className="flex min-w-0 flex-1 items-center gap-2">
           <SidebarTrigger className="-ml-1 shrink-0" />
@@ -41,7 +41,7 @@ export function DashboardHeader() {
             ) : null}
             <p
               className={cn(
-                "truncate font-semibold text-base tracking-tight",
+                "truncate rounded-sm bg-primary/10 px-2 py-0.5 text-xs font-extrabold text-primary",
                 showBreadcrumbs && "md:hidden"
               )}
             >

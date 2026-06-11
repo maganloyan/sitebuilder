@@ -9,6 +9,10 @@ import {
   NotificationPreferences,
   SettingsLayout,
 } from "@/components/kit"
+import {
+  SettingsNotificationPrefsSkeleton,
+  SettingsProfileSkeleton,
+} from "@/components/kit/feedback/view-skeletons"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -20,7 +24,6 @@ import {
   ItemMedia,
   ItemTitle,
 } from "@/components/ui/item"
-import { Skeleton } from "@/components/ui/skeleton"
 import { getInitials } from "@/lib/utils"
 import { useTheme } from "@/lib/ThemeProvider"
 import { useNotificationPreferences } from "@/hooks/use-portal-notifications"
@@ -52,13 +55,7 @@ function ProfileSection() {
   const { data: user, isLoading } = useFrappeGetDoc<FrappeUser>("User", currentUser || "")
 
   if (isLoading) {
-    return (
-      <div className="grid max-w-md gap-4">
-        <Skeleton className="size-20 rounded-lg" />
-        <Skeleton className="h-10 w-full" />
-        <Skeleton className="h-10 w-full" />
-      </div>
-    )
+    return <SettingsProfileSkeleton />
   }
 
   if (!user) return <p className="text-sm text-muted-foreground">Unable to load profile.</p>
@@ -172,11 +169,7 @@ export function SettingsPage() {
         {activeId === "notifications" ? (
           <FormSection title="Notifications" description="Email and in-app channels for portal activity.">
             {prefsLoading ? (
-              <div className="grid max-w-2xl gap-2">
-                <Skeleton className="h-10 w-full" />
-                <Skeleton className="h-10 w-full" />
-                <Skeleton className="h-10 w-full" />
-              </div>
+              <SettingsNotificationPrefsSkeleton />
             ) : (
               <NotificationPreferences
                 preferences={notificationPrefs}

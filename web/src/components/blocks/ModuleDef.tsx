@@ -12,7 +12,7 @@ interface ModuleDefProps {
 
 const ModuleDef: React.FC<ModuleDefProps> = ({
    title, 
-   module ="webbuilder"
+   module ="sitebuilder"
    }) => {
   const navigate = useNavigate();
 

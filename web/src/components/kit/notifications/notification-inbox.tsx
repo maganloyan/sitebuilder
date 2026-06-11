@@ -3,6 +3,7 @@ import { Link } from "react-router-dom"
 
 import { NotificationEmptyState } from "@/components/kit/notifications/notification-empty-state"
 import { NotificationItem } from "@/components/kit/notifications/notification-item"
+import { NotificationInboxSkeleton } from "@/components/kit/feedback/view-skeletons"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -10,7 +11,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Skeleton } from "@/components/ui/skeleton"
 import type { InAppNotification } from "@/types/in-app-notification"
 
 export function NotificationInbox({
@@ -64,18 +64,7 @@ export function NotificationInbox({
         </div>
 
         {isLoading ? (
-          <div className="space-y-3 p-4">
-            {Array.from({ length: 3 }).map((_, i) => (
-              <div key={i} className="flex gap-3">
-                <Skeleton className="size-9 shrink-0 rounded-lg" />
-                <div className="flex-1 space-y-2">
-                  <Skeleton className="h-3.5 w-3/4" />
-                  <Skeleton className="h-3 w-full" />
-                  <Skeleton className="h-2.5 w-1/3" />
-                </div>
-              </div>
-            ))}
-          </div>
+          <NotificationInboxSkeleton />
         ) : notifications.length === 0 ? (
           <NotificationEmptyState compact />
         ) : (

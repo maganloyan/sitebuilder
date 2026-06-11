@@ -1,36 +1,21 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import { Bell, CheckCheck } from "lucide-react"
+import { motion } from "motion/react"
 
 import {
   NotificationEmptyState,
   NotificationItem,
 } from "@/components/kit"
+import { NotificationPageSkeleton } from "@/components/kit/feedback/view-skeletons"
 import { Button } from "@/components/ui/button"
-import { Skeleton } from "@/components/ui/skeleton"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { usePortalHeaderActionSetter } from "@/context/portal-page-meta-context"
 import { usePortalNotifications } from "@/hooks/use-portal-notifications"
 import { groupNotificationsByDate } from "@/lib/notification-ui"
+import { staggerContainerVariants, staggerItemVariants } from "@/lib/motion-variants"
 import type { InAppNotification } from "@/types/in-app-notification"
 
 type Filter = "all" | "unread"
-
-function NotificationSkeletonList() {
-  return (
-    <div className="space-y-3">
-      {Array.from({ length: 4 }).map((_, i) => (
-        <div key={i} className="flex gap-3 rounded-xl border p-4">
-          <Skeleton className="size-10 shrink-0 rounded-lg" />
-          <div className="flex-1 space-y-2">
-            <Skeleton className="h-4 w-2/3" />
-            <Skeleton className="h-3.5 w-full" />
-            <Skeleton className="h-3 w-1/4" />
-          </div>
-        </div>
-      ))}
-    </div>
-  )
-}
 
 function NotificationGroups({
   notifications,
@@ -48,16 +33,22 @@ function NotificationGroups({
           <h2 className="text-muted-foreground text-xs font-semibold uppercase tracking-wider">
             {group.label}
           </h2>
-          <div className="space-y-2">
+          <motion.div
+            className="space-y-2"
+            variants={staggerContainerVariants}
+            initial="hidden"
+            animate="show"
+          >
             {group.items.map((notification) => (
-              <NotificationItem
-                key={notification.id}
-                notification={notification}
-                variant="page"
-                onMarkRead={onMarkRead}
-              />
+              <motion.div key={notification.id} variants={staggerItemVariants}>
+                <NotificationItem
+                  notification={notification}
+                  variant="page"
+                  onMarkRead={onMarkRead}
+                />
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </section>
       ))}
     </div>
@@ -123,7 +114,7 @@ export function NotificationsPage() {
       </div>
 
       {isLoading ? (
-        <NotificationSkeletonList />
+        <NotificationPageSkeleton />
       ) : visible.length === 0 ? (
         <div className="rounded-xl border border-dashed">
           <NotificationEmptyState

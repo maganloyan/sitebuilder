@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { useFrappeGetCall } from "frappe-react-sdk"
 import { PortalErrorState } from "@/components/kit/feedback/portal-state"
-import { Skeleton } from "@/components/ui/skeleton"
+import { FormViewSkeleton } from "@/components/kit/feedback/view-skeletons"
 import DynamicCreate from "../form/DynamicCreate"
 
 const toTitleCase = (s: string) =>
@@ -58,12 +58,7 @@ export default function CreateView() {
   }))
 
   if (isLoading) {
-    return (
-      <div className="space-y-4">
-        <Skeleton className="h-10 w-full" />
-        <Skeleton className="h-48 w-full" />
-      </div>
-    )
+    return <FormViewSkeleton embedded />
   }
 
   if (error) {

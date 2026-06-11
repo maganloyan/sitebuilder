@@ -11,9 +11,10 @@ import {
 } from "@tanstack/react-table"
 import { useFrappeGetDocList, useFrappeGetDocCount, useFrappeDeleteDoc } from "frappe-react-sdk"
 import { useNavigate } from "react-router-dom"
+import { motion } from "motion/react"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
-import { Skeleton } from "@/components/ui/skeleton"
+import { DataTableSkeleton } from "@/components/kit/feedback/view-skeletons"
 import {
   Table,
   TableBody,
@@ -31,6 +32,7 @@ import { DataTableToolbar } from "./DataTableToolbar"
 import { DataTablePagination } from "./DataTablePagination"
 import { DataTableBulkBar } from "./DataTableBulkBar"
 import { formatListCellValue } from "@/lib/format-list-cell"
+import { staggerContainerVariants, staggerItemVariants } from "@/lib/motion-variants"
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -221,21 +223,7 @@ export default function DynamicTable({
   const wrapperClass = embedded ? "space-y-3" : "space-y-3 p-4 sm:p-6"
 
   if (isLoading) {
-    return (
-      <div className={wrapperClass}>
-        <div className="flex items-center justify-between">
-          <Skeleton className="h-8 w-48" />
-          <Skeleton className="h-8 w-24" />
-        </div>
-        <div className="rounded-lg border">
-          <div className="p-1">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <Skeleton key={i} className="h-10 w-full mb-1 last:mb-0" />
-            ))}
-          </div>
-        </div>
-      </div>
-    )
+    return <DataTableSkeleton embedded={embedded} filterCount={Math.max(filters.length, 1)} />
   }
 
   if (error) {
@@ -296,8 +284,8 @@ export default function DynamicTable({
             ))}
           </TableHeader>
 
-          <TableBody>
-            {table.getRowModel().rows.length === 0 ? (
+          {table.getRowModel().rows.length === 0 ? (
+            <TableBody>
               <TableRow>
                 <TableCell colSpan={tableColumns.length} className="p-0">
                   <PortalEmptyState
@@ -314,13 +302,21 @@ export default function DynamicTable({
                   />
                 </TableCell>
               </TableRow>
-            ) : (
-              table.getRowModel().rows.map(row => (
-                <TableRow
+            </TableBody>
+          ) : (
+            <motion.tbody
+              className="[&_tr:last-child]:border-0"
+              variants={staggerContainerVariants}
+              initial="hidden"
+              animate="show"
+            >
+              {table.getRowModel().rows.map(row => (
+                <motion.tr
                   key={row.id}
+                  variants={staggerItemVariants}
                   data-state={row.getIsSelected() ? "selected" : undefined}
                   className={cn(
-                    "cursor-pointer transition-colors",
+                    "border-b transition-colors hover:bg-muted/50 cursor-pointer",
                     row.getIsSelected() && "bg-primary/5 hover:bg-primary/8"
                   )}
                   onClick={() => navigate(`${viewPath}/${row.id}`)}
@@ -343,10 +339,10 @@ export default function DynamicTable({
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
                   ))}
-                </TableRow>
-              ))
-            )}
-          </TableBody>
+                </motion.tr>
+              ))}
+            </motion.tbody>
+          )}
         </Table>
       </div>
 

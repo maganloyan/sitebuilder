@@ -7,7 +7,7 @@ import toast from "@/lib/portal-toast"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { FormSection } from "@/components/kit"
-import { Skeleton } from "@/components/ui/skeleton"
+import { FormViewSkeleton } from "@/components/kit/feedback/view-skeletons"
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
 import FieldRenderer from "./FieldRenderer"
@@ -23,7 +23,6 @@ import {
   getFirstInvalidFieldname,
   validateFormFields,
 } from "@/lib/validate-form-fields"
-import { Card, CardContent } from "@/components/ui/card"
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -106,35 +105,6 @@ function organizeFields(fields: FormField[]): Tab[] {
 
   return tabs.filter(t => t.sections.some(s => s.columns.some(c => c.length > 0)))
 }
-
-// ── Loading skeleton ─────────────────────────────────────────────────────────
-
-function FormSkeleton() {
-  return (
-    <div className="space-y-6 p-6">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <Skeleton className="h-8 w-8" />
-          <Skeleton className="h-5 w-48" />
-        </div>
-        <Skeleton className="h-9 w-28" />
-      </div>
-      <Skeleton className="h-9 w-64" />
-      <Card>
-        <CardContent className="p-6 space-y-4">
-          {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="space-y-1.5">
-              <Skeleton className="h-4 w-24" />
-              <Skeleton className="h-9 w-full" />
-            </div>
-          ))}
-        </CardContent>
-      </Card>
-    </div>
-  )
-}
-
-// ── Main Component ────────────────────────────────────────────────────────────
 
 export default function DocForm({
   doctype,
@@ -237,7 +207,7 @@ export default function DocForm({
     return () => clearPageMeta()
   }, [applyPageMeta, clearPageMeta, doctype, mode, pageTitle])
 
-  if (isLoading) return <FormSkeleton />
+  if (isLoading) return <FormViewSkeleton embedded={variant === "embedded"} />
 
   const tabs = organizeFields(fields)
 
